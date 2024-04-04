@@ -8,14 +8,18 @@ public typealias SnapToScrollEventHandler = ((SnapToScrollEvent) -> Void)
 public struct HStackSnapCore<Content: View>: View {
     // MARK: Lifecycle
 
+    @Binding var selectedIndex: Int?
+
     public init(
         leadingOffset: CGFloat,
+        selectedIndex: Binding<Int?>? = nil,
         spacing: CGFloat? = nil,
         coordinateSpace: String = "SnapToScroll",
         @ViewBuilder content: @escaping () -> Content,
         eventHandler: SnapToScrollEventHandler? = .none) {
             
         self.content = content
+        self._selectedIndex = selectedIndex ?? .constant(nil)
         self.targetOffset = leadingOffset
         self.spacing = spacing
         self.scrollOffset = leadingOffset
@@ -90,6 +94,14 @@ public struct HStackSnapCore<Content: View>: View {
                     eventHandler?(.didLayout(layoutInfo: itemScrollPositions))
                 }
             })
+            .onChange(of: selectedIndex) { newValue in
+                // Update state
+                withAnimation(.easeOut(duration: 0.2)) {
+                    scrollOffset = snapLocations[selectedIndex] ?? 0
+                }
+                prevScrollOffset = scrollOffset
+                eventHandler?(.didLayout(layoutInfo: itemScrollPositions))
+            }
             .contentShape(Rectangle())
             .gesture(snapDrag)
         }

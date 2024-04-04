@@ -5,14 +5,18 @@ public struct HStackSnap<Content: View>: View {
 
     // MARK: Lifecycle
 
+    @Binding var selectedIndex: Int?
+
     public init(
         alignment: SnapAlignment,
+        selectedIndex: Binding<Int>? = nil,
         spacing: CGFloat? = nil,
         coordinateSpace: String = "SnapToScroll",
         @ViewBuilder content: @escaping () -> Content,
         eventHandler: SnapToScrollEventHandler? = .none) {
 
         self.content = content
+        self._selectedIndex = selectedIndex != nil ? Binding<Int?>(selectedIndex!) : .constant(nil)
         self.alignment = alignment
         self.leadingOffset = alignment.scrollOffset
         self.spacing = spacing
@@ -34,6 +38,7 @@ public struct HStackSnap<Content: View>: View {
 
             HStackSnapCore(
                 leadingOffset: leadingOffset,
+                selectedIndex: $selectedIndex,
                 spacing: spacing,
                 coordinateSpace: coordinateSpace,
                 content: content,

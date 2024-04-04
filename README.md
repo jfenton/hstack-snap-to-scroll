@@ -36,12 +36,13 @@ For more examples, see `SnapToScrollDemo/ContentView.swift`.
 
 ## Configuration
 
-`HStackSnap` comes with two customizable properties:
+`HStackSnap` comes with some customizable properties:
 
 - `alignment`: The way you'd like your elements to be arranged. 
     - `leading(CGFloat)`: Aligns your child views to the leading edge of `HStackSnap`. This configuration supports elements of various sizes, so long as they don't take up all available horizontal space (which would extend beyond the screen). Use the value to set the size of the left offset.
     - `center(CGFloat)`: Automatically aligns your child view to the center of the screen, using the offset value you've provided. This is accomplished with inside of the `.snapAlignmentHelper` which sets the frame width based on the available space. Note that setting your own width elsewhere may produce unexpected layouts.
 - `coordinateSpace`: Option to set custom name for the coordinate space, in the case you're using multiple `HStackSnap`s of various sizes. If you use this, set the same value in `.snapAlignmentHelper`.
+- `selectedIndex`: (Optional) A @State variable binding e.g. $selectedIndex, which can be used programatically slide between Views.
 
 `.snapAlignmentHelper` comes with two options as well:
 
